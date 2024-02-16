@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
+
 
 import java.util.List;
 
@@ -37,9 +40,16 @@ public class InternApplicationController {
     public List<InternApplicationDto> getInternByUniversity(@PathVariable("universityName") String uni){
         return  internApplicationService.getInternByUniversityNameOrderByGpa(uni);
     }
-    @PostMapping("/internApplications/add/")
-    public InternApplicationDto addIntern(@RequestBody InternApplicationDto internApplicationDto){
-        return internApplicationService.addIntern(internApplicationDto);
+
+    @GetMapping("/internApplications/create")
+    public ModelAndView RegistrationForm(ModelMap model) {
+        model.addAttribute("formData", new InternApplicationDto());
+        return new ModelAndView("/internApplications/create", model);
+    }
+    @PostMapping("/internApplications/create")
+    public ModelAndView addIntern(@RequestBody @ModelAttribute("formData") InternApplicationDto internApplicationDto, ModelMap map){
+        internApplicationService.addIntern(internApplicationDto);
+        return new ModelAndView("/internApplications/success", map);
     }
     @PutMapping("/internApplications/accept/")
     public ResponseEntity<Integer> acceptInterById(@RequestParam Long id, @RequestParam boolean accept){

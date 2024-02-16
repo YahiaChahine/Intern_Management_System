@@ -1,6 +1,7 @@
 package com.yahia.internsApplication.model.intern;
 
 import com.yahia.internsApplication.model.DesiredTrack;
+import com.yahia.internsApplication.model.Role;
 import com.yahia.internsApplication.model.internsProjects.InternsProjects;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -43,6 +44,8 @@ public class Intern {
     @Column(name = "email")
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "intern", cascade = CascadeType.PERSIST)
     Set<InternsProjects> internsProjects;
